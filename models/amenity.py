@@ -1,21 +1,19 @@
 #!/usr/bin/python3
-""" instances amenities """
-from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, ForeignKey, Table
-from sqlalchemy.orm import relationship
+"""This module instantiates an object of class FileStorage"""
+from models.engine.file_storage import FileStorage
+from models.engine.db_storage import DBStorage
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
 from models.place import Place
+from models.review import Review
 from os import getenv
 
-STORAGE = getenv("HBNB_TYPE_STORAGE")
 
-
-class Amenity(BaseModel, Base):
-    """Permit to add the amenities for places"""
-
-    __tablename__ = "amenities"
-    if STORAGE == "db":
-        name = Column(String(128), nullable=False)
-        place_amenities = relationship("Place", secondary=Place.place_amenity)
-
-    else:
-        name = ""
+if getenv("HBNB_TYPE_STORAGE") == "db":
+    storage = DBStorage()
+else:
+    storage = FileStorage()
+storage.reload()
