@@ -9,14 +9,13 @@ STORAGE = getenv("HBNB_TYPE_STORAGE")
 
 
 class City(BaseModel, Base):
-    """ The city class, contains state ID and name """
-    __tablename__ = 'cities'
+    """The city class, contains state ID and name"""
+
+    __tablename__ = "cities"
     if STORAGE == "db":
-        state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
+        state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
         name = Column(String(128), nullable=False)
-        places = relationship('Place',
-                              backref='cities',
-                              cascade="all, delete-orphan")
+        places = relationship("Place", backref="cities", cascade="all, delete-orphan")
     else:
         name = ""
         state_id = ""

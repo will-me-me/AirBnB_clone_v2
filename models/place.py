@@ -10,11 +10,12 @@ STORAGE = getenv("HBNB_TYPE_STORAGE")
 
 
 class Place(BaseModel, Base):
-    """ A place to stay """
-    __tablename__ = 'places'
+    """A place to stay"""
+
+    __tablename__ = "places"
     if STORAGE == "db":
-        city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
-        user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
+        city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
+        user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
         name = Column(String(128), nullable=False)
         description = Column(String(1024), nullable=True)
         number_rooms = Column(Integer, nullable=False, default=0)
@@ -23,20 +24,30 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
-        reviews = relationship('Review',
-                               backref='place',
-                               cascade="all, delete")
+        reviews = relationship("Review", backref="place", cascade="all, delete")
 
-        place_amenity = Table('place_amenity', Base.metadata,
-                              Column('place_id', String(60),
-                                     ForeignKey('places.id'),
-                                     primary_key=True, nullable=False),
-                              Column('amenity_id', String(60),
-                                     ForeignKey('amenities.id'),
-                                     primary_key=True, nullable=False))
+        place_amenity = Table(
+            "place_amenity",
+            Base.metadata,
+            Column(
+                "place_id",
+                String(60),
+                ForeignKey("places.id"),
+                primary_key=True,
+                nullable=False,
+            ),
+            Column(
+                "amenity_id",
+                String(60),
+                ForeignKey("amenities.id"),
+                primary_key=True,
+                nullable=False,
+            ),
+        )
 
-        amenities = relationship('Amenity', secondary=place_amenity,
-                                 viewonly=False, backref="places")
+        amenities = relationship(
+            "Amenity", secondary=place_amenity, viewonly=False, backref="places"
+        )
 
     else:
         city_id = ""
@@ -54,6 +65,7 @@ class Place(BaseModel, Base):
         @property
         def reviews(self):
             from models import storage
+
             list_review = []
             all_rev = storage.all(Review)
             for value in all_rev.values():
@@ -63,9 +75,10 @@ class Place(BaseModel, Base):
 
         @property
         def amenities(self):
-            '''getter'''
+            """getter"""
             from models import storage
             from models.amenity import Amenity
+
             list_amenity = []
             all_ameni = storage.all(Amenity)
             for value in all_ameni.values():
@@ -75,8 +88,9 @@ class Place(BaseModel, Base):
 
         @amenities.setter
         def amenities(self, value):
-            '''setter'''
+            """setter"""
             from models import storage
             from models.amenity import Amenity
+
             if type(value) == Amenity:
                 self.amenity_ids.append(value.id)
