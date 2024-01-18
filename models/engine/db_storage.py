@@ -3,7 +3,7 @@
 
 from os import getenv
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy import (create_engine)
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import Base
 from models.state import State
@@ -14,8 +14,9 @@ from models.review import Review
 from models.amenity import Amenity
 
 
-class DBStorage():
+class DBStorage:
     """file storage"""
+
     __engine = None
     __session = None
 
@@ -27,10 +28,11 @@ class DBStorage():
         db = getenv("HBNB_MYSQL_DB")
         env = getenv("HBNB_ENV")
 
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                                      .format(user, password, host, db),
-                                      pool_pre_ping=True)
-        if env == 'test':
+        self.__engine = create_engine(
+            "mysql+mysqldb://{}:{}@{}/{}".format(user, password, host, db),
+            pool_pre_ping=True,
+        )
+        if env == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
@@ -43,17 +45,17 @@ class DBStorage():
             for item in my_classes:
                 query = self.__session.query(item)
                 for obj in query.all():
-                    obj_key = '{}.{}'.format(obj.__class__.name__, obj.id)
+                    obj_key = "{}.{}".format(obj.__class__.name__, obj.id)
                     objects[obj_key] = obj
         else:
             query = self.__session.query(cls)
             for obj in query.all():
-                obj_key = '{}.{}'.format(obj.__class__.__name__, obj.id)
+                obj_key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 objects[obj_key] = obj
         return objects
 
     def new(self, obj):
-        """ add object to the current database session"""
+        """add object to the current database session"""
         self.__session.add(obj)
 
     def save(self):
@@ -69,8 +71,7 @@ class DBStorage():
         """creates all the tables in database"""
         Base.metadata.create_all(self.__engine)
 
-        my_session_maker = sessionmaker(
-            bind=self.__engine, expire_on_commit=False)
+        my_session_maker = sessionmaker(bind=self.__engine, expire_on_commit=False)
         my_session = scoped_session(my_session_maker)
         self.__session = my_session()
 

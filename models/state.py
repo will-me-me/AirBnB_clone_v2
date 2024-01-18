@@ -9,11 +9,11 @@ from models.city import City
 
 
 class State(BaseModel, Base):
-    """ State class """
+    """State class"""
+
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    cities = relationship("City", backref='state',
-                          cascade='all, delete, delete-orphan')
+    cities = relationship("City", backref="state", cascade="all, delete, delete-orphan")
 
     @property
     def cities(self):
@@ -22,6 +22,7 @@ class State(BaseModel, Base):
         to the current State.id
         """
         from models import storage
+
         related_cities = []
         cities = storage.all(City)
         for city in cities.values():
