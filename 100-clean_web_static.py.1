@@ -1,15 +1,18 @@
 #!/usr/bin/python3
+"""
+Deletes out-of-date archives
+fab -f 100-clean_web_static.py do_clean:number=2
+    -i ssh-key -u ubuntu > /dev/null 2>&1
+"""
+
 import os
 from fabric.api import *
 
-# Set the remote hosts, username and key file to use for authentication
-env.hosts = ['54.172.57.109', 100.25.146.200']
-env.user = 'ubuntu'
-env.key_filename = '~/.ssh/id_rsa_sandbox'
+env.hosts = ['52.87.155.66', '54.89.109.87']
 
 
 def do_clean(number=0):
-    """Deletes out-of-date archives.
+    """Delete out-of-date archives.
     Args:
         number (int): The number of archives to keep.
     If number is 0 or 1, keeps only the most recent archive. If
