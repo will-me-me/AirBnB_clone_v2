@@ -7,9 +7,9 @@ from fabric.api import put
 from fabric.api import run
 
 # Set the remote hosts, username and key file to use for authentication
-env.hosts = ['52.201.228.252', '34.204.61.36']
+env.hosts = ['54.172.57.109', '100.25.146.200']
 env.user = 'ubuntu'
-env.key_filename = '~/.ssh/id_rsa_sandbox'
+env.key_filename = '~/.ssh/school'
 
 
 def do_pack():
